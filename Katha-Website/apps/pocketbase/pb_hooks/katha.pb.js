@@ -1,0 +1,3 @@
+onRecordCreateRequest((e)=>{const text=(e.record.getString('title')+' '+e.record.getString('body')).toLowerCase(); if(/\b(fuck|shit|bitch|porn|sex|rape|nude|kill you|hurt you|slut|asshole)\b/i.test(text))throw new BadRequestError('This text contains prohibited language. Keep KATHA respectful and non-explicit.'); e.next();},'blogs','comments','messages','placement_requests');
+onRecordCreateRequest((e)=>{const u=e.auth;e.record.set('author',u.getString('name')||'KATHA writer');e.next();},'blogs','comments');
+onRecordAfterCreateSuccess((e)=>{const c=$app.findCollectionByNameOrId('writers');const r=new Record(c);r.set('owner',e.record.id);r.set('name',e.record.getString('name')||'KATHA writer');$app.save(r);e.next();},'users');
